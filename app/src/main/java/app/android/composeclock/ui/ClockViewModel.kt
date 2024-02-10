@@ -41,7 +41,7 @@ class ClockViewModel : ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
             while (true) {
-                delay(20)
+                delay(1000) // delay 1 second
                 secHandDegrees += 6
                 secondsCounter++
                 Log.d("Akhil", "hrHand: $hrHandDegrees minHand: $minHandDegrees")
