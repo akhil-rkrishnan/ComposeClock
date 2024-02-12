@@ -1,13 +1,11 @@
 package app.android.composeclock.ui
 
 import android.graphics.Paint
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,7 +18,13 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import kotlinx.coroutines.delay
+import app.android.composeclock.model.ClockHandStyle
+import app.android.composeclock.model.FrameStyle
+import app.android.composeclock.utils.FifteenMarkerRatio
+import app.android.composeclock.utils.FiveMarkerRatio
+import app.android.composeclock.utils.HourIntervalStepRatio
+import app.android.composeclock.utils.MarkerStep
+import app.android.composeclock.utils.NinetyMarkerRatio
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -36,14 +40,12 @@ fun Clock(
     }
 
     val hourHandDegrees by animateFloatAsState(
-        targetValue = clockViewModel.hrHandDegrees,
+        targetValue = clockViewModel.hrHandDegrees, label = "Hour hand in degrees",
     )
     val minuteHandDegrees by animateFloatAsState(
-        targetValue = clockViewModel.minHandDegrees,
+        targetValue = clockViewModel.minHandDegrees, label = "Minute hand in degrees",
     )
-    val secondHandDegrees by animateFloatAsState(
-        targetValue = clockViewModel.secHandDegrees,
-    )
+    val secondHandDegrees= clockViewModel.secHandDegrees
 
     Canvas(modifier = Modifier
         .fillMaxSize()
@@ -78,25 +80,25 @@ fun Clock(
             var textAngle = -90f
             var time = 1
             var timeText = ""
-            for (angle in style.frameStyle.startAngle.toInt()..style.frameStyle.sweepAngle.toInt() step 6) {
+            for (angle in style.frameStyle.startAngle.toInt()..style.frameStyle.sweepAngle.toInt() step MarkerStep) {
                 textAngle += angle
                 val line = when {
-                    angle % 90 == 0 -> {
+                    angle % NinetyMarkerRatio == 0 -> {
                         style.ninetyStepColor to style.ninetyStepStroke
                     }
 
-                    angle % 15 == 0 -> {
+                    angle % FifteenMarkerRatio == 0 -> {
                         style.fifteenStepColor to style.fifteenStepStroke
                     }
 
-                    angle % 5 == 0 -> {
+                    angle % FiveMarkerRatio == 0 -> {
                         style.fiveStepColor to style.fiveStepStroke
                     }
 
                     else -> style.singleStepColor to style.singleStepStroke
                 }
                 timeText = when {
-                    angle % 30 == 0 && time <= 12 -> {
+                    angle % HourIntervalStepRatio.toInt() == 0 && time <= 12 -> {
                         time.toString().apply { time++ }
                     }
 

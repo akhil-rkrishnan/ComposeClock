@@ -1,44 +1,40 @@
 package app.android.composeclock.ui
 
-import android.util.Range
 import androidx.compose.ui.graphics.Color
+import app.android.composeclock.model.FrameStyle
+import app.android.composeclock.model.Time
+import app.android.composeclock.utils.CenterRadius
+import app.android.composeclock.utils.FifteenStepColor
+import app.android.composeclock.utils.FifteenStepStroke
+import app.android.composeclock.utils.FiveStepColor
+import app.android.composeclock.utils.FiveStepStroke
+import app.android.composeclock.utils.FrameColor
+import app.android.composeclock.utils.FrameStrokeWidth
+import app.android.composeclock.utils.HourHandColor
+import app.android.composeclock.utils.MarkerDistanceFromArc
+import app.android.composeclock.utils.MinuteHandColor
+import app.android.composeclock.utils.NinetyStepColor
+import app.android.composeclock.utils.NinetyStepStroke
+import app.android.composeclock.utils.SecondHandColor
+import app.android.composeclock.utils.SingleStepColor
+import app.android.composeclock.utils.SingleStepStroke
+import app.android.composeclock.utils.StartAngle
+import app.android.composeclock.utils.SweepAngle
 
 data class ClockStyle(
-    val centerRadius: Float = 200f,
+    val centerRadius: Float = CenterRadius,
     val time: Time,
-    val frameStyle: FrameStyle = FrameStyle.Round(startAngle = 0f, sweepAngle = 360f, 5f, 20f),
-    val frameColor: Color = Color.Black.copy(alpha = 0.4f),
-    val minHandColor: Color = Color.Red,
-    val hourHandColor: Color = Color.Blue,
-    val secondHandColor: Color = Color.DarkGray,
-    val ninetyStepColor: Color = Color.Red,
-    val fifteenStepColor: Color = Color.Black,
-    val fiveStepColor: Color = Color.Blue,
-    val singleStepColor: Color = Color.LightGray,
-    val ninetyStepStroke: Float = 8f,
-    val fifteenStepStroke: Float = 6f,
-    val fiveStepStroke: Float = 4f,
-    val singleStepStroke: Float = 1f
+    val frameStyle: FrameStyle = FrameStyle.Round(startAngle = StartAngle, sweepAngle = SweepAngle, frameStrokeWidth = FrameStrokeWidth, markerStartDistanceFromArc = MarkerDistanceFromArc),
+    val frameColor: Color = FrameColor,
+    val minHandColor: Color = MinuteHandColor,
+    val hourHandColor: Color = HourHandColor,
+    val secondHandColor: Color = SecondHandColor,
+    val ninetyStepColor: Color = NinetyStepColor,
+    val fifteenStepColor: Color = FifteenStepColor,
+    val fiveStepColor: Color = FiveStepColor,
+    val singleStepColor: Color = SingleStepColor,
+    val ninetyStepStroke: Float = NinetyStepStroke,
+    val fifteenStepStroke: Float = FifteenStepStroke,
+    val fiveStepStroke: Float = FiveStepStroke,
+    val singleStepStroke: Float = SingleStepStroke
 )
-
-data class Time(
-    val hours: Int,
-    val minutes: Int,
-    val seconds: Int
-)
-
-sealed class FrameStyle {
-    data class Round(
-        val startAngle: Float,
-        val sweepAngle: Float,
-        val frameStrokeWidth: Float,
-        val markerStartDistanceFromArc: Float,
-        val markerEndDistanceFromArc: Float = markerStartDistanceFromArc + 20f
-    ) : FrameStyle()
-
-    object Square : FrameStyle()
-}
-
-enum class ClockHandStyle {
-    HOUR, MINUTE, SECOND
-}
