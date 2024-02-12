@@ -48,7 +48,6 @@ fun Clock(
     val secondHandDegrees= clockViewModel.secHandDegrees
 
     Canvas(modifier = Modifier
-        .fillMaxSize()
         .aspectRatio(1f), onDraw = {
 
         centerOffset = this.center

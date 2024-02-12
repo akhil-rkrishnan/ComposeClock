@@ -15,6 +15,8 @@ import app.android.composeclock.utils.StepRatio
 import app.android.composeclock.utils.SweepAngle
 import app.android.composeclock.utils.TimeInterval
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -41,10 +43,14 @@ class ClockViewModel : ViewModel() {
     private var minuteCounter by mutableIntStateOf(time.minutes)
     private var secondsCounter by mutableIntStateOf(time.seconds)
 
-    private var resumeProcess by mutableStateOf(false)
+    private var resumeProcess = false
+    private var timeJob : Job ? = null
+
+    var digitalTime by mutableStateOf(time.toString())
+        private set
 
     private fun startProcess() {
-        viewModelScope.launch(Dispatchers.IO) {
+        timeJob = viewModelScope.launch(Dispatchers.Main) {
             while (resumeProcess) {
                 delay(TimeInterval) // delay 1 second
                 if (secHandDegrees + StepRatio < SweepAngle) {
@@ -58,32 +64,45 @@ class ClockViewModel : ViewModel() {
                     minHandDegrees += StepRatio
                     minuteCounter++
                     secondsCounter = 0
-                    if (minuteCounter == MaxStepCounter) {
+                    if (time.minutes + minuteCounter == MaxStepCounter) {
                         minuteCounter = 0
                         hrHandDegrees += HourIntervalStepRatio // each digits is a multiple of 30f
                         val hour =
                             if (time.hours == 11) 0 // for time 12 we need to assign 0 to calculate proper angle
                             else time.hours + 1
-                        time = time.copy(hours = hour) // increment the hour
+                        time = time.copy(hours = hour, minutes = 0) // increment the hour
                     }
                     hrHandDegrees =
                         (minuteCounter * 0.5f) + (time.hours * HourIntervalStepRatio) //angle position for hour hand based on the minute hand
                 }
+                setDisplayTime(Time(time.hours, time.minutes + minuteCounter, secondsCounter))
             }
         }
     }
 
-    fun updateTime(hours: Int, minutes: Int, seconds: Int) {
-        time = time.copy(hours = hours, minutes = minutes, seconds = seconds)
-        hrHandDegrees = getHourAngle(time.hours)
-        minHandDegrees = getHourAngle(time.minutes)
-        secHandDegrees = getHourAngle(time.seconds)
-        handleProcess(true)
-        startProcess()
+    fun updateTime(newTime: Time) {
+        viewModelScope.launch {
+            handleProcess(false)
+            time = newTime
+            delay(150)
+            hrHandDegrees = getHourAngle(time.hours)
+            minHandDegrees = getMinuteAngle(time.minutes)
+            secHandDegrees = getSecondsAngle(time.seconds)
+            handleProcess(true)
+            startProcess()
+        }
+
+    }
+
+    private fun setDisplayTime(time: Time) {
+        digitalTime = time.toString()
     }
 
     fun handleProcess(resume: Boolean) {
         resumeProcess = resume
+        if (!resume) {
+            timeJob?.cancel()
+        }
     }
 
     private fun getHourAngle(hours: Int): Float {
@@ -98,5 +117,18 @@ class ClockViewModel : ViewModel() {
 
     private fun getSecondsAngle(seconds: Int): Float {
         return seconds * StepRatio
+    }
+
+    fun getRandomTimes(limit: Int = 5): List<Time> {
+        val timeList = arrayListOf<Time>()
+        for (i in 0 until limit) {
+            val hour = (0..11).random()
+            val minutes = (0..45).random()
+            timeList.add(Time(hour, minutes, 0))
+        }
+        return timeList
+    }
+    fun reset() {
+        secHandDegrees = 0f
     }
 }

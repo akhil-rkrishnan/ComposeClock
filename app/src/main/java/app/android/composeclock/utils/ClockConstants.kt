@@ -16,6 +16,6 @@ const val FifteenStepStroke = 6f
 const val FiveStepStroke = 4f
 const val SingleStepStroke = 1f
 const val MaxStepCounter = 60
-const val TimeInterval = 1000L
+const val TimeInterval = 10L
 
 

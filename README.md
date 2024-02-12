@@ -8,10 +8,6 @@ The Compose Clock app ingeniously displays time in the 12-hour format, showcasin
 
 ### Architecture
 
-Embracing the MVVM (Model-View-ViewModel) architecture, Compose Clock ensures a robust and maintainable codebase. This architectural pattern promotes separation of concerns by dividing the application into three distinct layers:
+This project uses [***MVVM (Model View View-Model)***](https://developer.android.com/jetpack/docs/guide#recommended-app-arch) architecture.
 
-Model: Represents the data and business logic of the application. In Compose Clock, the model layer manages time-related data and operations, facilitating seamless interaction between the view and view model layers.
-
-View: Corresponds to the user interface components responsible for presenting data to the user. In this app, the view layer encompasses the visual representation of the analog clock, providing users with an intuitive means of interpreting time.
-
-ViewModel: Acts as an intermediary between the model and view layers, orchestrating data flow and business logic. By adopting the MVVM architecture, Compose Clock promotes code reusability, testability, and maintainability, thereby enhancing the overall development experience.
+![](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png)
