@@ -2,9 +2,12 @@ package app.android.composeclock.ui
 
 import android.graphics.Paint
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
 import app.android.composeclock.model.ClockHandStyle
 import app.android.composeclock.model.FrameStyle
 import app.android.composeclock.utils.FifteenMarkerRatio
@@ -45,9 +49,14 @@ fun Clock(
     val minuteHandDegrees by animateFloatAsState(
         targetValue = clockViewModel.minHandDegrees, label = "Minute hand in degrees",
     )
-    val secondHandDegrees= clockViewModel.secHandDegrees
+    val secondHandDegrees = clockViewModel.secHandDegrees
 
     Canvas(modifier = Modifier
+        .background(color = Color.White)
+        .border(
+            border = BorderStroke(1.dp, color = Color.DarkGray),
+            shape = RoundedCornerShape(10.dp)
+        )
         .aspectRatio(1f), onDraw = {
 
         centerOffset = this.center
