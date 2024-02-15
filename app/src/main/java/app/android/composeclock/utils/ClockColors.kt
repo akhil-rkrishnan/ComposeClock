@@ -10,3 +10,4 @@ val NinetyStepColor = Color.Red
 val FifteenStepColor = Color.Black
 val FiveStepColor = Color.Blue
 val SingleStepColor = Color.LightGray
+val CenterLockColor = Color.Black

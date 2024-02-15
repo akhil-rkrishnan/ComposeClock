@@ -7,9 +7,9 @@ data class Time(
 ) {
     override fun toString(): String {
         var formattedString = ""
-        formattedString += if (hours < 10) "0$hours" else "$hours"
-        formattedString += if (minutes < 10) ":0$minutes" else ":$minutes"
-        formattedString += if (seconds < 10) ":0$seconds" else ":$seconds"
+        formattedString += if (hours < 10) "0$hours " else "$hours "
+        formattedString += if (minutes < 10) ": 0$minutes " else ": $minutes "
+        formattedString += if (seconds < 10) ": 0$seconds" else ": $seconds"
         return formattedString
     }
 }

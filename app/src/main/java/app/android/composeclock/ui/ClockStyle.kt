@@ -3,6 +3,7 @@ package app.android.composeclock.ui
 import androidx.compose.ui.graphics.Color
 import app.android.composeclock.model.FrameStyle
 import app.android.composeclock.model.Time
+import app.android.composeclock.utils.CenterLockColor
 import app.android.composeclock.utils.CenterRadius
 import app.android.composeclock.utils.FifteenStepColor
 import app.android.composeclock.utils.FifteenStepStroke
@@ -36,5 +37,6 @@ data class ClockStyle(
     val ninetyStepStroke: Float = NinetyStepStroke,
     val fifteenStepStroke: Float = FifteenStepStroke,
     val fiveStepStroke: Float = FiveStepStroke,
-    val singleStepStroke: Float = SingleStepStroke
+    val singleStepStroke: Float = SingleStepStroke,
+    val centerLockColor: Color = CenterLockColor
 )

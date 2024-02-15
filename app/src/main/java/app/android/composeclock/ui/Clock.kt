@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
@@ -131,7 +133,7 @@ fun Clock(
                 if (angle % 30 == 0) {
                     drawContext.canvas.nativeCanvas.apply {
                         val textRadius =
-                            style.centerRadius - style.frameStyle.markerEndDistanceFromArc - 5 - 20
+                            style.centerRadius - style.frameStyle.markerEndDistanceFromArc - 38
                         val markPoint =
                             markerLinePoints(
                                 -angle - 210,
@@ -148,7 +150,7 @@ fun Clock(
                             x,
                             y,
                             Paint().apply {
-                                textSize = 18f
+                                textSize = 36f
                                 textAlign = Paint.Align.CENTER
                             }
                         )
@@ -156,8 +158,6 @@ fun Clock(
                 }
             }
 
-            // draw the hands
-            drawCircle(color = Color.Black, radius = 5f, centerOffset)
 
             val hourOffset = getClockHandPath(ClockHandStyle.HOUR, centerOffset)
             val minuteOffset = getClockHandPath(ClockHandStyle.MINUTE, centerOffset)
@@ -184,7 +184,8 @@ fun Clock(
             rotate(hourHandDegrees, centerOffset) {
                 drawPath(
                     path = hourHand,
-                    color = style.hourHandColor
+                    color = style.hourHandColor,
+                    style = Stroke(width = 2f, cap = StrokeCap.Round, miter = 1f, join = StrokeJoin.Round)
                 )
             }
             rotate(minuteHandDegrees, centerOffset) {
@@ -199,6 +200,9 @@ fun Clock(
                     color = style.secondHandColor
                 )
             }
+            // draw the hands
+            drawCircle(color = style.centerLockColor, radius = 20f, centerOffset)
+
         }
     })
 }
@@ -209,13 +213,13 @@ private fun getClockHandPath(clockHandStyle: ClockHandStyle, centerOffset: Offse
             Triple(
                 Offset( //middle
                     x = centerOffset.x,
-                    y = centerOffset.y - 70f
+                    y = centerOffset.y - 200f
                 ), Offset( //bottomLeft
-                    x = centerOffset.x - 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x - 15f,
+                    y = centerOffset.y - 15f
                 ), Offset( //bottomRight
-                    x = centerOffset.x + 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x + 15f,
+                    y = centerOffset.y - 15f
                 )
             )
         }
@@ -224,13 +228,13 @@ private fun getClockHandPath(clockHandStyle: ClockHandStyle, centerOffset: Offse
             Triple(
                 Offset(  //middle
                     x = centerOffset.x,
-                    y = centerOffset.y - 80f
+                    y = centerOffset.y - 250f
                 ), Offset( //bottomLeft
-                    x = centerOffset.x - 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x - 15f,
+                    y = centerOffset.y - 15f
                 ), Offset( //bottomRight
-                    x = centerOffset.x + 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x + 15f,
+                    y = centerOffset.y - 15f
                 )
             )
         }
@@ -239,13 +243,13 @@ private fun getClockHandPath(clockHandStyle: ClockHandStyle, centerOffset: Offse
             Triple(
                 Offset(
                     x = centerOffset.x,
-                    y = centerOffset.y - 110f
+                    y = centerOffset.y - 250f
                 ), Offset(
-                    x = centerOffset.x - 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x - 15f,
+                    y = centerOffset.y - 15f
                 ), Offset(
-                    x = centerOffset.x + 4f,
-                    y = centerOffset.y - 10f
+                    x = centerOffset.x + 15f,
+                    y = centerOffset.y - 15f
                 )
             )
         }

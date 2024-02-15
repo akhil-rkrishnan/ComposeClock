@@ -25,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.android.composeclock.model.Time
@@ -54,7 +56,8 @@ class MainActivity : ComponentActivity() {
                             viewModel.updateTime(it)
                         })
                         Text(text = viewModel.digitalTime, style = TextStyle(
-                            fontFamily = FontFamily.SansSerif,
+                            fontFamily = FontFamily(Font(R.font.roboto_medium)),
+                            fontWeight = FontWeight(300),
                             fontSize = 18.sp,
                             color = Color.Blue
                         ))
@@ -95,7 +98,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(all = 15.dp),
                             text = it.toString(),
                             style = TextStyle(
-                                fontFamily = FontFamily.SansSerif,
+                                fontFamily = FontFamily(Font(R.font.roboto_medium)),
+                                fontWeight = FontWeight(300),
                                 fontSize = 16.sp,
                                 color = Color.Gray
                             )
