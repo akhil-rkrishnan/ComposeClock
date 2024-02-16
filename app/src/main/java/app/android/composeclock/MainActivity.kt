@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                         Text(text = viewModel.digitalTime, style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.monoton_regular)),
                             fontWeight = FontWeight(500),
-                            fontSize = 22.sp,
+                            fontSize = 30.sp,
                             color = Color.Black
                         ))
                         Box(modifier = Modifier.fillMaxWidth(0.8f)) {
