@@ -228,7 +228,7 @@ private fun getClockHandPath(clockHandStyle: ClockHandStyle, centerOffset: Offse
             Triple(
                 Offset(  //middle
                     x = centerOffset.x,
-                    y = centerOffset.y - 250f
+                    y = centerOffset.y - 300f
                 ), Offset( //bottomLeft
                     x = centerOffset.x - 15f,
                     y = centerOffset.y - 15f

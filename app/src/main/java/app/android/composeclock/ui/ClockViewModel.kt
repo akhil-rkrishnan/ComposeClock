@@ -127,7 +127,4 @@ class ClockViewModel : ViewModel() {
         }
         return timeList
     }
-    fun reset() {
-        secHandDegrees = 0f
-    }
 }

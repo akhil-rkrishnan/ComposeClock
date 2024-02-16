@@ -34,6 +34,7 @@ import app.android.composeclock.model.Time
 import app.android.composeclock.ui.Clock
 import app.android.composeclock.ui.ClockViewModel
 import app.android.composeclock.ui.theme.ComposeClockTheme
+import app.android.composeclock.utils.FrameColor
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,10 +57,10 @@ class MainActivity : ComponentActivity() {
                             viewModel.updateTime(it)
                         })
                         Text(text = viewModel.digitalTime, style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.roboto_medium)),
-                            fontWeight = FontWeight(300),
-                            fontSize = 18.sp,
-                            color = Color.Blue
+                            fontFamily = FontFamily(Font(R.font.monoton_regular)),
+                            fontWeight = FontWeight(500),
+                            fontSize = 22.sp,
+                            color = Color.Black
                         ))
                         Box(modifier = Modifier.fillMaxWidth(0.8f)) {
                             Clock(viewModel)
@@ -87,7 +88,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .background(Color.White)
                             .border(
-                                BorderStroke(width = 2.dp, Color.LightGray),
+                                BorderStroke(width = 2.dp, Color.DarkGray.copy(alpha = 0.2f)),
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .clickable {
@@ -98,10 +99,10 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(all = 15.dp),
                             text = it.toString(),
                             style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.roboto_medium)),
-                                fontWeight = FontWeight(300),
+                                fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                                fontWeight = FontWeight(500),
                                 fontSize = 16.sp,
-                                color = Color.Gray
+                                color = Color.DarkGray
                             )
                         )
                     }
