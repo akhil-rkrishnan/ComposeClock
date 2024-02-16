@@ -26,6 +26,8 @@ class ClockViewModel : ViewModel() {
     private var time by mutableStateOf(Time())
     var style by mutableStateOf(ClockStyle(time = time))
         private set
+    private var minuteCounter by mutableIntStateOf(time.minutes)
+    private var secondsCounter by mutableIntStateOf(time.seconds)
     var hrHandDegrees by mutableFloatStateOf(
         getHourAngle(time.hours)
     )
@@ -39,8 +41,7 @@ class ClockViewModel : ViewModel() {
         getSecondsAngle(time.seconds)
     )
         private set
-    private var minuteCounter by mutableIntStateOf(time.minutes)
-    private var secondsCounter by mutableIntStateOf(time.seconds)
+
 
     private var resumeProcess = false
     private var timeJob : Job ? = null
@@ -86,11 +87,11 @@ class ClockViewModel : ViewModel() {
             handleProcess(false)
             time = newTime
             delay(150)
+            minuteCounter = time.minutes
+            secondsCounter = 0
             hrHandDegrees = getHourAngle(time.hours)
             minHandDegrees = getMinuteAngle(time.minutes)
             secHandDegrees = getSecondsAngle(time.seconds)
-            minuteCounter = time.minutes
-            secondsCounter = 0
             digitalTime = ""
             handleProcess(true)
             startProcess()
@@ -111,8 +112,8 @@ class ClockViewModel : ViewModel() {
 
     private fun getHourAngle(hours: Int): Float {
         return if (hours in 1..11) {
-            hours * HourIntervalStepRatio
-        } else 0f
+            (minuteCounter * 0.5f) + (time.hours * HourIntervalStepRatio)
+        } else (minuteCounter * 0.5f) + 0f
     }
 
     private fun getMinuteAngle(minutes: Int): Float {
