@@ -44,6 +44,7 @@ class ClockViewModel : ViewModel() {
 
     private var resumeProcess = false
     private var timeJob : Job ? = null
+    private var updateTime : Job ? = null
 
     var digitalTime by mutableStateOf(time.toString())
         private set
@@ -74,19 +75,23 @@ class ClockViewModel : ViewModel() {
                     hrHandDegrees =
                         (minuteCounter * 0.5f) + (time.hours * HourIntervalStepRatio) //angle position for hour hand based on the minute hand
                 }
-                setDisplayTime(Time(time.hours, time.minutes + minuteCounter, secondsCounter))
+                setDisplayTime(Time(time.hours, minuteCounter, secondsCounter))
             }
         }
     }
 
     fun updateTime(newTime: Time) {
-        viewModelScope.launch {
+        updateTime?.cancel()
+        updateTime = viewModelScope.launch {
             handleProcess(false)
             time = newTime
             delay(150)
             hrHandDegrees = getHourAngle(time.hours)
             minHandDegrees = getMinuteAngle(time.minutes)
             secHandDegrees = getSecondsAngle(time.seconds)
+            minuteCounter = time.minutes
+            secondsCounter = 0
+            digitalTime = ""
             handleProcess(true)
             startProcess()
         }
