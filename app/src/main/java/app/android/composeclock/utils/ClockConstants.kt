@@ -3,7 +3,7 @@ package app.android.composeclock.utils
 const val CenterRadius = 400f
 const val StartAngle = 0f
 const val SweepAngle = 360f
-const val FrameStrokeWidth = 10f
+const val FrameStrokeWidth = 8f
 const val MarkerDistanceFromArc = 20f
 const val StepRatio = 6f
 const val MarkerStep = StepRatio.toInt()
@@ -16,6 +16,6 @@ const val FifteenStepStroke = 6f
 const val FiveStepStroke = 4f
 const val SingleStepStroke = 1f
 const val MaxStepCounter = 60
-const val TimeInterval = 10L
+const val TimeInterval = 1000L
 
 

@@ -2,10 +2,11 @@ package app.android.composeclock.utils
 
 import androidx.compose.ui.graphics.Color
 
-val FrameColor = Color.Black.copy(alpha = 0.25f)
+val FrameOuterColor = Color.LightGray.copy(alpha = 0.8f)
+val FrameInnerColor = Color.Black.copy(alpha = 0.8f)
 val MinuteHandColor = Color.Black
 val HourHandColor = Color.DarkGray
-val SecondHandColor = Color.LightGray
+val SecondHandColor = Color.Red
 val NinetyStepColor = Color.Red
 val FifteenStepColor = Color.Black
 val FiveStepColor = Color.Blue

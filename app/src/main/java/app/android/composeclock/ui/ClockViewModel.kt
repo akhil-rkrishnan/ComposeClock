@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.android.composeclock.model.Time
@@ -42,13 +44,18 @@ class ClockViewModel : ViewModel() {
     )
         private set
 
+    private val _randomTimes = mutableStateListOf<Time>()
+    val randomTimes get() = _randomTimes
 
     private var resumeProcess = false
     private var timeJob : Job ? = null
     private var updateTime : Job ? = null
 
-    var digitalTime by mutableStateOf(time.toString())
+    var digitalTime by mutableStateOf(time.asAnnotatedString())
         private set
+    init {
+        refreshTimes()
+    }
 
     private fun startProcess() {
         timeJob = viewModelScope.launch(Dispatchers.Main) {
@@ -65,7 +72,7 @@ class ClockViewModel : ViewModel() {
                     minHandDegrees += StepRatio
                     minuteCounter++
                     secondsCounter = 0
-                    if (time.minutes + minuteCounter == MaxStepCounter) {
+                    if (minuteCounter == MaxStepCounter) {
                         minuteCounter = 0
                         hrHandDegrees += HourIntervalStepRatio // each digits is a multiple of 30f
                         val hour =
@@ -92,15 +99,20 @@ class ClockViewModel : ViewModel() {
             hrHandDegrees = getHourAngle(time.hours)
             minHandDegrees = getMinuteAngle(time.minutes)
             secHandDegrees = getSecondsAngle(time.seconds)
-            digitalTime = ""
+            digitalTime = AnnotatedString("")
             handleProcess(true)
             startProcess()
         }
 
     }
 
+    fun refreshTimes(limit: Int = 5) {
+        _randomTimes.clear()
+        _randomTimes.addAll(getRandomTimes(limit))
+    }
+
     private fun setDisplayTime(time: Time) {
-        digitalTime = time.toString()
+        digitalTime = time.asAnnotatedString()
     }
 
     fun handleProcess(resume: Boolean) {
@@ -124,7 +136,7 @@ class ClockViewModel : ViewModel() {
         return seconds * StepRatio
     }
 
-    fun getRandomTimes(limit: Int = 5): List<Time> {
+    private fun getRandomTimes(limit: Int = 5): List<Time> {
         val timeList = arrayListOf<Time>()
         for (i in 0 until limit) {
             val hour = (0..11).random()

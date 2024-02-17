@@ -9,7 +9,7 @@ import app.android.composeclock.utils.FifteenStepColor
 import app.android.composeclock.utils.FifteenStepStroke
 import app.android.composeclock.utils.FiveStepColor
 import app.android.composeclock.utils.FiveStepStroke
-import app.android.composeclock.utils.FrameColor
+import app.android.composeclock.utils.FrameOuterColor
 import app.android.composeclock.utils.FrameStrokeWidth
 import app.android.composeclock.utils.HourHandColor
 import app.android.composeclock.utils.MarkerDistanceFromArc
@@ -25,8 +25,13 @@ import app.android.composeclock.utils.SweepAngle
 data class ClockStyle(
     val centerRadius: Float = CenterRadius,
     val time: Time,
-    val frameStyle: FrameStyle = FrameStyle.Round(startAngle = StartAngle, sweepAngle = SweepAngle, frameStrokeWidth = FrameStrokeWidth, markerStartDistanceFromArc = MarkerDistanceFromArc),
-    val frameColor: Color = FrameColor,
+    val frameStyle: FrameStyle = FrameStyle.Round(
+        startAngle = StartAngle,
+        sweepAngle = SweepAngle,
+        frameStrokeWidth = FrameStrokeWidth,
+        markerStartDistanceFromArc = MarkerDistanceFromArc
+    ),
+    val frameColor: Color = FrameOuterColor,
     val minHandColor: Color = MinuteHandColor,
     val hourHandColor: Color = HourHandColor,
     val secondHandColor: Color = SecondHandColor,

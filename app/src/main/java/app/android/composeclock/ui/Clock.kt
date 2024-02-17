@@ -1,12 +1,20 @@
 package app.android.composeclock.ui
 
 import android.graphics.Paint
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -28,6 +37,7 @@ import app.android.composeclock.model.ClockHandStyle
 import app.android.composeclock.model.FrameStyle
 import app.android.composeclock.utils.FifteenMarkerRatio
 import app.android.composeclock.utils.FiveMarkerRatio
+import app.android.composeclock.utils.FrameInnerColor
 import app.android.composeclock.utils.HourIntervalStepRatio
 import app.android.composeclock.utils.MarkerStep
 import app.android.composeclock.utils.NinetyMarkerRatio
@@ -51,14 +61,21 @@ fun Clock(
     val minuteHandDegrees by animateFloatAsState(
         targetValue = clockViewModel.minHandDegrees, label = "Minute hand in degrees",
     )
+    /*val secondHandDegrees by animateFloatAsState(
+        targetValue = clockViewModel.secHandDegrees, label = "second hand in degrees",
+        animationSpec = repeatable(
+            iterations = 1,
+            animation = tween(durationMillis = 500, delayMillis = 10, easing = LinearOutSlowInEasing),
+        )
+    )*/
     val secondHandDegrees = clockViewModel.secHandDegrees
 
     Canvas(modifier = Modifier
-        .background(color = Color.White)
-        .border(
-            border = BorderStroke(1.dp, color = Color.DarkGray),
+        .fillMaxWidth()
+        .clip(
             shape = RoundedCornerShape(10.dp)
         )
+        .background(color = Color.White)
         .aspectRatio(1f), onDraw = {
 
         centerOffset = this.center
@@ -80,7 +97,22 @@ fun Clock(
                     false,
                     Paint().apply {
                         strokeWidth = style.frameStyle.frameStrokeWidth
-                        color = style.frameColor.toArgb()
+                        color = style.frameColor.toArgb()// style.frameColor.toArgb()
+                        strokeMiter = Stroke.DefaultMiter
+                        this.style = Paint.Style.STROKE
+                    }
+                )
+                drawArc(
+                    left - 10,
+                    top - 10,
+                    right + 10,
+                    bottom + 10,
+                    style.frameStyle.startAngle,
+                    style.frameStyle.sweepAngle,
+                    false,
+                    Paint().apply {
+                        strokeWidth = style.frameStyle.frameStrokeWidth
+                        color = FrameInnerColor.toArgb()  //FrameInnerColor.toArgb()
                         strokeMiter = Stroke.DefaultMiter
                         this.style = Paint.Style.STROKE
                     }
@@ -185,7 +217,12 @@ fun Clock(
                 drawPath(
                     path = hourHand,
                     color = style.hourHandColor,
-                    style = Stroke(width = 2f, cap = StrokeCap.Round, miter = 1f, join = StrokeJoin.Round)
+                    style = Stroke(
+                        width = 2f,
+                        cap = StrokeCap.Round,
+                        miter = 1f,
+                        join = StrokeJoin.Round
+                    )
                 )
             }
             rotate(minuteHandDegrees, centerOffset) {
