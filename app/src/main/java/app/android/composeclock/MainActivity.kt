@@ -14,6 +14,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +43,7 @@ import app.android.composeclock.model.Time
 import app.android.composeclock.ui.Clock
 import app.android.composeclock.ui.ClockViewModel
 import app.android.composeclock.ui.theme.ComposeClockTheme
+import java.util.concurrent.Flow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,12 +70,17 @@ class MainActivity : ComponentActivity() {
                             viewModel.updateTime(it)
                         })
                         Text(
-                            text = viewModel.digitalTime, style = TextStyle(
+                            text = viewModel.digitalTime,
+                            style = TextStyle(
                                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                                 fontWeight = FontWeight(500),
                                 fontSize = 30.sp,
                                 color = Color.Black,
-                            ), modifier = Modifier.fillMaxWidth().animateContentSize(), textAlign = TextAlign.Center
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateContentSize(),
+                            textAlign = TextAlign.Center
                         )
                         Box(modifier = Modifier.fillMaxWidth(0.9f)) {
                             Clock(viewModel)
@@ -84,41 +92,62 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
     @Composable
     private fun TimeRow(viewModel: ClockViewModel, onTimeChanged: (Time) -> Unit) {
         val times = viewModel.randomTimes
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(0.6f),
-            verticalAlignment = Alignment.CenterVertically,
+        FlowRow(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            times.forEach {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .background(Color.White)
-                            .border(
-                                BorderStroke(width = 2.dp, Color.DarkGray.copy(alpha = 0.2f)),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .clickable {
-                                onTimeChanged(it)
-                            }
-                            .animateItemPlacement()
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(all = 15.dp),
-                            text = it.toString(),
-                            style = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                fontWeight = FontWeight(500),
-                                fontSize = 16.sp,
-                                color = Color.DarkGray
-                            )
-                        )
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .background(Color.White)
+                    .border(
+                        BorderStroke(width = 2.dp, Color.DarkGray.copy(alpha = 0.2f)),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .clickable {
+                        onTimeChanged(viewModel.getSystemTime())
                     }
+            ) {
+                Text(
+                    modifier = Modifier.padding(all = 15.dp),
+                    text = "Get system time!",
+                    style = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                        fontWeight = FontWeight(500),
+                        fontSize = 16.sp,
+                        color = Color.DarkGray
+                    )
+                )
+            }
+            times.forEach {
+                Box(
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(10.dp))
+                        .background(Color.White)
+                        .border(
+                            BorderStroke(width = 2.dp, Color.DarkGray.copy(alpha = 0.2f)),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .clickable {
+                            onTimeChanged(it)
+                        }
+                       // .animateItemPlacement()
+                ) {
+                    Text(
+                        modifier = Modifier.padding(all = 15.dp),
+                        text = it.toString(),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                            fontWeight = FontWeight(500),
+                            fontSize = 16.sp,
+                            color = Color.DarkGray
+                        )
+                    )
                 }
             }
         }
@@ -126,7 +155,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun TitleRow(onTimeRefresh: () -> Unit) {
-        Row(modifier = Modifier.fillMaxWidth(0.6f), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier.fillMaxWidth(0.6f),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 text = "Select a time!", style = TextStyle(
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),

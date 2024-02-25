@@ -20,6 +20,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 private const val TAG = "ClockViewModel"
 
@@ -116,7 +119,7 @@ class ClockViewModel : ViewModel() {
         digitalTime = time.asAnnotatedString()
     }
 
-    fun handleProcess(resume: Boolean) {
+    private fun handleProcess(resume: Boolean) {
         resumeProcess = resume
         if (!resume) {
             timeJob?.cancel()
@@ -135,6 +138,23 @@ class ClockViewModel : ViewModel() {
 
     private fun getSecondsAngle(seconds: Int): Float {
         return seconds * StepRatio
+    }
+
+    fun getSystemTime(): Time {
+        var time = Time(0,0,0)
+        try {
+            val currentTime = Calendar.getInstance().time
+            val timeFormat = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+            val formattedTime = timeFormat.format(currentTime)
+            val splits = formattedTime.split(":")
+            if (splits.size == 3) {
+                time = Time(splits.first().toInt(), splits[1].toInt(), splits.last().toInt())
+            }
+        } catch (exception: Exception) {
+            Log.e(TAG, "System time processing exception: ${exception.message}")
+        }
+        return time
+
     }
 
     private fun getRandomTimes(limit: Int = 5): List<Time> {
