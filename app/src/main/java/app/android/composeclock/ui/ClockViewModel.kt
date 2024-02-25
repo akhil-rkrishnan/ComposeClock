@@ -48,11 +48,12 @@ class ClockViewModel : ViewModel() {
     val randomTimes get() = _randomTimes
 
     private var resumeProcess = false
-    private var timeJob : Job ? = null
-    private var updateTime : Job ? = null
+    private var timeJob: Job? = null
+    private var updateTime: Job? = null
 
     var digitalTime by mutableStateOf(time.asAnnotatedString())
         private set
+
     init {
         refreshTimes()
     }
@@ -64,7 +65,7 @@ class ClockViewModel : ViewModel() {
                 if (secHandDegrees + StepRatio < SweepAngle) {
                     secHandDegrees += StepRatio
                 } else {
-                    secHandDegrees = StepRatio
+                    secHandDegrees = 0f
                 }
                 secondsCounter++
                 Log.d(TAG, "hrHand: $hrHandDegrees minHand: $minHandDegrees")
@@ -95,7 +96,7 @@ class ClockViewModel : ViewModel() {
             time = newTime
             delay(150)
             minuteCounter = time.minutes
-            secondsCounter = 0
+            secondsCounter = time.seconds
             hrHandDegrees = getHourAngle(time.hours)
             minHandDegrees = getMinuteAngle(time.minutes)
             secHandDegrees = getSecondsAngle(time.seconds)
@@ -141,7 +142,8 @@ class ClockViewModel : ViewModel() {
         for (i in 0 until limit) {
             val hour = (0..11).random()
             val minutes = (0..45).random()
-            timeList.add(Time(hour, minutes, 0))
+            val seconds = (0..59).random()
+            timeList.add(Time(hour, minutes, seconds))
         }
         return timeList
     }
